@@ -165,7 +165,7 @@
         /* Header Styles */
         header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            padding: 1.8rem 0;
+            padding: 1.8rem 1rem;
             text-align: center;
             box-shadow: var(--shadow);
             position: relative;
@@ -507,6 +507,130 @@
             
             .feature-card {
                 padding: 2.5rem 1.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header {
+                padding: 1.5rem 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            main {
+                padding: 2rem 1rem;
+            }
+            
+            .hero-section {
+                padding: 2rem 1.5rem;
+                margin-bottom: 2.5rem;
+            }
+            
+            .upload-form {
+                padding: 2rem 1.5rem;
+                margin-bottom: 2.5rem;
+            }
+            
+            .file-upload-label {
+                padding: 2.5rem 1.5rem;
+            }
+            
+            .upload-icon {
+                font-size: 2.8rem;
+            }
+            
+            #file-name {
+                font-size: 1rem;
+            }
+            
+            .btn-primary {
+                padding: 1.2rem;
+                font-size: 1.1rem;
+            }
+            
+            .features h3 {
+                font-size: 1.8rem;
+                margin-bottom: 2rem;
+            }
+            
+            .feature-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .feature-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 1.7rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .feature-card h4 {
+                font-size: 1.3rem;
+            }
+            
+            .feature-card p {
+                font-size: 1rem;
+            }
+            
+            .legal-image {
+                height: 150px;
+                font-size: 1.4rem;
+                margin: 2.5rem 0;
+            }
+            
+            footer {
+                padding: 2rem 1.5rem;
+            }
+            
+            footer p {
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            .hero-section, .upload-form {
+                padding: 1.5rem 1rem;
+            }
+            
+            .file-upload-label {
+                padding: 2rem 1rem;
+            }
+            
+            .upload-icon {
+                font-size: 2.5rem;
+            }
+            
+            .features-grid {
+                gap: 1.5rem;
+            }
+            
+            .feature-card {
+                padding: 1.8rem 1.2rem;
+            }
+            
+            .feature-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .legal-image {
+                height: 130px;
+                font-size: 1.2rem;
             }
         }
     </style>

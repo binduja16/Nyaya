@@ -1,308 +1,2192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Analysis Result - AI Courtroom Assistant</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            navy: '#003566',
-            'navy-light': '#1a4a7a',
-            'light-blue': '#e6f0ff',
-            'accent-blue': '#0077b6'
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Analysis Result - AI Courtroom Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --primary-light: #2d3748;
+            --secondary: #2b6cb0;
+            --accent: #ed8936;
+            --gold: #d69e2e;
+            --light: #ffffff;
+            --light-gray: #f7fafc;
+            --mid-gray: #e2e8f0;
+            --dark-gray: #4a5568;
+            --text: #000000;
+            --text-light: #333333;
+            --success: #38a169;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.12);
+            --shadow-3d: 0 20px 40px rgba(0, 0, 0, 0.15);
+            --glass: rgba(255, 255, 255, 0.92);
+            --nav-gradient: linear-gradient(135deg, #1a365d 0%, #2d3748 50%, #2c5282 100%);
         }
-      }
-    }
-  </script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
-    
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #e6f0ff 0%, #f8fbff 100%);
-    }
-    
-    h1, h2, h3, h4, h5, h6 {
-      font-family: 'Playfair Display', serif;
-    }
-    
-    .section-header {
-      position: relative;
-      padding-left: 1.75rem;
-      color: #003566;
-    }
-    
-    .section-header::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      height: 24px;
-      width: 6px;
-      background-color: #0077b6;
-      border-radius: 3px;
-    }
-    
-    .fade-in {
-      animation: fadeIn 0.5s ease-in-out;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .hover-lift {
-      transition: all 0.3s ease;
-    }
-    
-    .hover-lift:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    }
-    
-    .ipc-card {
-      transition: all 0.3s ease;
-      border-left: 4px solid #003566;
-    }
-    
-    .ipc-card:hover {
-      border-left: 4px solid #0077b6;
-    }
-    
-    .download-btn {
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .download-btn::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 5px;
-      height: 5px;
-      background: rgba(255, 255, 255, 0.5);
-      opacity: 0;
-      border-radius: 100%;
-      transform: scale(1, 1) translate(-50%);
-      transform-origin: 50% 50%;
-    }
-    
-    .download-btn:focus:not(:active)::after {
-      animation: ripple 1s ease-out;
-    }
-    
-    @keyframes ripple {
-      0% {
-        transform: scale(0, 0);
-        opacity: 0.5;
-      }
-      20% {
-        transform: scale(200, 200);
-        opacity: 0.3;
-      }
-      100% {
-        opacity: 0;
-        transform: scale(500, 500);
-      }
-    }
 
-    /* Floating Background Elements */
-    .floating-elements {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: -1;
-    }
-    
-    .floating-element {
-      position: absolute;
-      background: rgba(26, 86, 219, 0.1);
-      border-radius: 10px;
-      box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
-      animation: float 15s infinite ease-in-out;
-    }
-    
-    .floating-element:nth-child(1) { width: 80px; height: 80px; top: 10%; left: 10%; animation-delay: 0s; }
-    .floating-element:nth-child(2) { width: 100px; height: 100px; top: 20%; right: 15%; animation-delay: -2s; }
-    .floating-element:nth-child(3) { width: 120px; height: 120px; bottom: 20%; left: 15%; animation-delay: -5s; }
-    .floating-element:nth-child(4) { width: 70px; height: 70px; bottom: 15%; right: 10%; animation-delay: -7s; }
-    .floating-element:nth-child(5) { width: 90px; height: 90px; top: 50%; left: 5%; animation-delay: -10s; }
-    
-    /* Floating Icons */
-    .floating-icon {
-      position: absolute;
-      font-size: 2.2rem;
-      color: rgba(26, 86, 219, 0.15);
-      animation: float-icon 20s infinite ease-in-out;
-      z-index: -1;
-    }
-    
-    .floating-icon:nth-child(6) { top: 15%; left: 5%; animation-delay: 0s; }
-    .floating-icon:nth-child(7) { top: 25%; right: 7%; animation-delay: -3s; }
-    .floating-icon:nth-child(8) { bottom: 25%; left: 7%; animation-delay: -6s; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #f0f7ff 0%, #e6f0ff 50%, #f0fff4 100%); 
+            color: var(--text);
+            min-height: 100vh; 
+            overflow-x: hidden; 
+            position: relative; 
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Enhanced 3D Background Elements */
+        .floating-elements { 
+            position: fixed; 
+            top:0; 
+            left:0; 
+            width:100%; 
+            height:100%; 
+            pointer-events:none; 
+            z-index:-1; 
+        }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0) rotate(0); }
-      50% { transform: translateY(-20px) rotate(10deg); }
-    }
+        .floating-element { 
+            position:absolute; 
+            border-radius:20px; 
+            box-shadow:0 20px 40px rgba(31,38,135,0.15); 
+            animation: float3d 20s infinite ease-in-out; 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+        }
 
-    @keyframes float-icon {
-      0%, 100% { transform: translateY(0) rotate(0); }
-      50% { transform: translateY(-15px) rotate(-10deg); }
-    }
-  </style>
+        .floating-element:nth-child(1) { 
+            width:120px; 
+            height:120px; 
+            top:10%; 
+            left:5%; 
+            background: linear-gradient(135deg, rgba(26,86,219,0.1) 0%, rgba(14,76,138,0.1) 100%);
+            animation-delay:0s; 
+        }
+
+        .floating-element:nth-child(2) { 
+            width:150px; 
+            height:150px; 
+            top:20%; 
+            right:8%; 
+            background: linear-gradient(135deg, rgba(255,158,26,0.1) 0%, rgba(245,158,11,0.1) 100%);
+            animation-delay:-3s; 
+        }
+
+        .floating-element:nth-child(3) { 
+            width:180px; 
+            height:180px; 
+            bottom:15%; 
+            left:10%; 
+            background: linear-gradient(135deg, rgba(13,148,136,0.1) 0%, rgba(56,161,105,0.1) 100%);
+            animation-delay:-6s; 
+        }
+
+        .floating-icon { 
+            position:absolute; 
+            font-size:3rem; 
+            color: rgba(26,86,219,0.08); 
+            animation: float-icon-3d 25s infinite ease-in-out; 
+            z-index:-1; 
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
+            text-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .floating-icon:nth-child(1) { 
+            top:12%; 
+            left:3%; 
+            animation-delay:0s; 
+            color: rgba(26,86,219,0.1); 
+        }
+
+        .floating-icon:nth-child(2) { 
+            top:25%; 
+            right:5%; 
+            animation-delay:-4s; 
+            color: rgba(255,158,26,0.1); 
+        }
+
+        .floating-icon:nth-child(3) { 
+            bottom:22%; 
+            left:5%; 
+            animation-delay:-8s; 
+            color: rgba(13,148,136,0.1); 
+        }
+
+        @keyframes float3d { 
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(1) translateZ(0); 
+                border-radius:20px; 
+            } 
+            25% { 
+                transform: translateY(-30px) rotate(5deg) scale(1.05) translateZ(10px); 
+                border-radius:25px; 
+            } 
+            50% { 
+                transform: translateY(20px) rotate(-5deg) scale(0.95) translateZ(5px); 
+                border-radius:30px; 
+            } 
+            75% { 
+                transform: translateY(-15px) rotate(3deg) scale(1.02) translateZ(8px); 
+                border-radius:25px; 
+            } 
+        }
+
+        @keyframes float-icon-3d { 
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(1) translateZ(0); 
+            } 
+            33% { 
+                transform: translateY(-40px) rotate(12deg) scale(1.15) translateZ(15px); 
+            } 
+            66% { 
+                transform: translateY(40px) rotate(-12deg) scale(0.85) translateZ(5px); 
+            } 
+        }
+
+        /* Language Controls */
+        .language-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--glass);
+            padding: 12px 18px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .language-indicator {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .language-selector {
+            padding: 6px 10px;
+            border: 1px solid var(--mid-gray);
+            border-radius: 6px;
+            background: white;
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+
+        .translate-btn {
+            padding: 8px 15px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .translate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26,86,219,0.3);
+        }
+
+        .global-voice-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--danger);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .global-voice-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(229,62,62,0.3);
+        }
+
+        /* Mobile Navigation Toggle */
+        .mobile-nav-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            z-index: 1001;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Enhanced Side Navigation */
+        .side-nav {
+            width: 300px;
+            background: var(--nav-gradient);
+            color: white;
+            padding: 2rem 0;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 15px 0 40px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            overflow-y: auto;
+            border-right: 3px solid var(--accent);
+            transform: translateZ(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-header {
+            text-align: center;
+            padding: 0 1.5rem 2rem;
+            border-bottom: 2px solid rgba(255,255,255,0.15);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .nav-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .nav-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .nav-header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0 1rem;
+        }
+
+        .nav-item {
+            margin-bottom: 0.8rem;
+            position: relative;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-radius: 12px;
+            border: 1px solid transparent;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            transform: translateX(8px) translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            color: white;
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, rgba(237, 137, 54, 0.2) 0%, rgba(214, 158, 46, 0.15) 100%);
+            border: 1px solid rgba(237, 137, 54, 0.3);
+            transform: translateX(5px);
+            box-shadow: 0 8px 20px rgba(237, 137, 54, 0.2);
+            color: white;
+        }
+
+        .nav-link i {
+            margin-right: 1.2rem;
+            font-size: 1.3rem;
+            width: 24px;
+            text-align: center;
+            color: var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover i,
+        .nav-link.active i {
+            color: var(--gold);
+            transform: scale(1.1);
+        }
+
+        .nav-text {
+            font-weight: 500;
+            font-size: 1rem;
+            letter-spacing: 0.3px;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 300px;
+            min-height: 100vh;
+            background: transparent;
+        }
+
+        /* Enhanced Header */
+        header { 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); 
+            padding: 2rem 0; 
+            text-align: center; 
+            box-shadow: var(--shadow-3d); 
+            position: relative; 
+            z-index: 10; 
+            border-bottom: 3px solid var(--accent);
+            transform: translateZ(25px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        h1 { 
+            font-family: 'Playfair Display', serif; 
+            color: var(--light); 
+            font-size: 3.2rem; 
+            margin-bottom: 0.5rem; 
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3); 
+            letter-spacing: 1.5px; 
+            position: relative;
+            z-index: 2;
+        }
+
+        h1::after {
+            content: '⚖️';
+            margin-left: 1rem;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+
+        main { 
+            padding: 3.5rem 2rem; 
+            position: relative; 
+            z-index: 5; 
+        }
+
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+
+        /* Enhanced Hero Section */
+        .hero-section { 
+            text-align: center; 
+            margin-bottom: 3.5rem; 
+            padding: 4rem 3rem; 
+            background: var(--glass); 
+            border-radius: 25px; 
+            box-shadow: var(--shadow-3d); 
+            transform-style: preserve-3d; 
+            transform: perspective(1000px) rotateX(2deg); 
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            position: relative; 
+            overflow: hidden; 
+            border: 1px solid rgba(255,255,255,0.8); 
+            backdrop-filter: blur(15px);
+            border-bottom: 4px solid var(--accent);
+        }
+
+        .hero-section::before { 
+            content: ""; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 5px; 
+            background: linear-gradient(90deg, var(--accent), var(--primary), var(--secondary), var(--accent)); 
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        .hero-section:hover { 
+            transform: perspective(1000px) rotateX(0deg) translateY(-5px); 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Voice Button Styles */
+        .voice-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 15px rgba(26,86,219,0.3);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .voice-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(26,86,219,0.4);
+        }
+
+        .voice-button.speaking {
+            background: linear-gradient(135deg, var(--danger) 0%, #c53030 100%);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Section Header */
+        .section-header {
+            position: relative;
+            padding-right: 80px;
+            display: flex; 
+            align-items: center; 
+            margin-bottom: 2.5rem; 
+            padding-bottom: 1.5rem; 
+            border-bottom: 2px solid var(--mid-gray); 
+            position: relative;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+        }
+
+        .section-icon { 
+            width: 70px; 
+            height: 70px; 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); 
+            color: white; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-size: 1.8rem; 
+            margin-right: 2rem; 
+            box-shadow: 0 8px 25px rgba(26,86,219,0.3); 
+            transform: translateZ(15px);
+            border: 3px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .section-icon:hover {
+            transform: translateZ(20px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(26,86,219,0.4);
+        }
+
+        .section-title { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 2.4rem; 
+            color: var(--primary); 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        h2 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 2.8rem; 
+            margin-bottom: 1.5rem; 
+            color: var(--primary); 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        p { 
+            font-size: 1.2rem; 
+            line-height: 1.8; 
+            margin-bottom: 1.5rem; 
+            color: var(--text);
+        }
+
+        /* Enhanced Result Sections */
+        .result-section { 
+            background: var(--glass); 
+            padding: 3.5rem; 
+            border-radius: 25px; 
+            box-shadow: var(--shadow-3d); 
+            margin-bottom: 3.5rem; 
+            transform: translateZ(20px); 
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            position: relative; 
+            overflow: hidden; 
+            border: 1px solid rgba(255,255,255,0.8); 
+            backdrop-filter: blur(15px);
+            border-bottom: 4px solid var(--primary);
+            display: none;
+        }
+
+        .result-section.active {
+            display: block;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .result-section::before { 
+            content: ""; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 5px; 
+            background: linear-gradient(90deg, var(--primary), var(--accent)); 
+        }
+
+        .result-section:hover { 
+            transform: translateZ(30px) translateY(-5px); 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15); 
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) translateZ(0);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) translateZ(20px);
+            }
+        }
+
+        /* Enhanced Content Elements */
+        .content-box { 
+            background: linear-gradient(135deg, var(--light-gray) 0%, rgba(247,250,252,0.8) 100%); 
+            border-radius: 15px; 
+            padding: 2.5rem; 
+            margin-top: 2rem; 
+            border-left: 5px solid var(--primary); 
+            box-shadow: inset 0 3px 10px rgba(0,0,0,0.05), 0 5px 15px rgba(0,0,0,0.05);
+            transform: translateZ(5px);
+            transition: all 0.3s ease;
+            color: var(--text);
+        }
+
+        .content-box:hover {
+            transform: translateZ(10px);
+            box-shadow: inset 0 3px 10px rgba(0,0,0,0.05), 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .content-box pre { 
+            white-space: pre-wrap; 
+            font-family: 'Inter', sans-serif; 
+            font-size: 1.1rem; 
+            line-height: 1.7; 
+            color: var(--text);
+        }
+
+        /* Enhanced Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-left: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transform: translateZ(5px);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .status-high { background: linear-gradient(135deg, var(--danger), #c53030); color: white; }
+        .status-medium { background: linear-gradient(135deg, var(--warning), #b7791f); color: white; }
+        .status-low { background: linear-gradient(135deg, var(--success), #2f855a); color: white; }
+
+        /* Enhanced Progress Bar */
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            position: relative;
+            padding: 0 2rem;
+        }
+
+        .progress-bar {
+            position: absolute;
+            top: 35px;
+            left: 0;
+            height: 6px;
+            background: var(--mid-gray);
+            width: 100%;
+            z-index: 1;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--accent));
+            border-radius: 3px;
+            transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 2px 8px rgba(56,161,105,0.3);
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--mid-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 12px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 3px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-size: 1.1rem;
+        }
+
+        .step-circle.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(26,86,219,0.3);
+        }
+
+        .step-circle.completed {
+            background: linear-gradient(135deg, var(--success), #2f855a);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 6px 18px rgba(56,161,105,0.3);
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* Enhanced Advocate Cards */
+        .advocate-card {
+            background: linear-gradient(135deg, var(--light-gray) 0%, rgba(247,250,252,0.9) 100%);
+            border-radius: 18px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--primary);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 1px solid rgba(255,255,255,0.8);
+            position: relative;
+            overflow: hidden;
+            color: var(--text);
+        }
+
+        .advocate-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .advocate-card:hover::before {
+            left: 100%;
+        }
+
+        .advocate-card:hover {
+            transform: translateY(-8px) translateZ(15px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            border-left: 5px solid var(--accent);
+        }
+
+        .advocate-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .advocate-detail {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            color: var(--text);
+        }
+
+        .advocate-detail i {
+            margin-right: 1rem;
+            color: var(--secondary);
+            width: 20px;
+            font-size: 1.1rem;
+        }
+
+        /* Enhanced Buttons */
+        .btn-primary { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 1rem; 
+            width: 100%; 
+            padding: 1.6rem; 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); 
+            color: white; 
+            border: none; 
+            border-radius: 15px; 
+            font-size: 1.3rem; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+            box-shadow: 0 8px 25px rgba(26,86,219,0.3); 
+            transform: translateZ(0); 
+            letter-spacing: 0.8px; 
+            text-decoration: none; 
+            margin-top: 2.5rem; 
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover { 
+            transform: translateY(-5px) translateZ(15px); 
+            box-shadow: 0 15px 35px rgba(26,86,219,0.4); 
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%); 
+        }
+
+        .btn-primary:active { 
+            transform: translateY(0) translateZ(5px); 
+            box-shadow: 0 5px 20px rgba(26,86,219,0.3); 
+        }
+
+        /* Enhanced Footer */
+        footer { 
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); 
+            color: white; 
+            text-align: center; 
+            padding: 3rem; 
+            margin-top: 5rem; 
+            border-top: 3px solid var(--accent);
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--gold), var(--accent));
+        }
+
+        footer p { 
+            max-width: 800px; 
+            margin: 0 auto; 
+            font-size: 1rem; 
+            color: rgba(255,255,255,0.9); 
+            line-height: 1.7; 
+        }
+
+        /* Tab Styles */
+        .tab-container {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--mid-gray);
+            background: var(--light-gray);
+            border-radius: 12px;
+            padding: 0.5rem;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+            margin: 0 0.2rem;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(26,86,219,0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Enhanced Chat Styles */
+        .chat-container {
+            background: var(--glass);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-3d);
+            margin-top: 2rem;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        .chat-box {
+            border: 1px solid var(--mid-gray);
+            padding: 1.5rem;
+            height: 350px;
+            overflow-y: auto;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--light-gray) 0%, rgba(247,250,252,0.9) 100%);
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .chat-message {
+            max-width: 80%;
+            padding: 1rem 1.2rem;
+            border-radius: 18px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            font-size: 0.95rem;
+            position: relative;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+            box-shadow: 0 4px 15px rgba(26,86,219,0.2);
+        }
+
+        .bot-message {
+            background: white;
+            color: var(--text);
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+            border: 1px solid var(--mid-gray);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .bot-message strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .bot-message ul, .bot-message ol {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+            color: var(--text);
+        }
+
+        .bot-message li {
+            margin-bottom: 0.3rem;
+            color: var(--text);
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 1rem 1.2rem;
+            border-radius: 12px;
+            border: 1px solid var(--mid-gray);
+            font-size: 1rem;
+            resize: none;
+            font-family: 'Inter', sans-serif;
+            background: white;
+            transition: all 0.3s ease;
+            line-height: 1.4;
+            color: var(--text);
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26,86,219,0.1);
+        }
+
+        .chat-send {
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px;
+        }
+
+        .chat-send:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26,86,219,0.3);
+        }
+
+        .chat-send:active {
+            transform: translateY(0);
+        }
+
+        /* IPC Sections */
+        .ipc-section {
+            background: var(--light-gray);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--success);
+            display: flex;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            color: var(--text);
+        }
+
+        .ipc-section i {
+            color: var(--success);
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        /* Chat Voice Controls */
+        .chat-voice-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .chat-voice-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chat-voice-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(26,86,219,0.3);
+        }
+
+        .chat-voice-btn.listening {
+            background: linear-gradient(135deg, var(--danger) 0%, #c53030 100%);
+            animation: pulse 1.5s infinite;
+        }
+
+        /* ========== RESPONSIVE DESIGN ========== */
+        /* Large Tablets */
+        @media (max-width: 1024px) {
+            .side-nav {
+                width: 280px;
+            }
+            .main-content {
+                margin-left: 280px;
+            }
+        }
+
+        /* Tablets and Small Screens */
+        @media (max-width: 768px) {
+            .mobile-nav-toggle {
+                display: flex;
+            }
+            
+            .side-nav {
+                width: 100%;
+                height: auto;
+                position: fixed;
+                top: 0;
+                left: 0;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+            }
+            
+            .side-nav.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .language-controls {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+                width: calc(100% - 2rem);
+                box-sizing: border-box;
+            }
+            
+            h1 { 
+                font-size: 2.5rem; 
+                padding: 0 1rem;
+            }
+            
+            h2 { 
+                font-size: 2.2rem; 
+            }
+            
+            .hero-section, .result-section { 
+                padding: 2.5rem 1.5rem; 
+                margin-left: 1rem;
+                margin-right: 1rem;
+                width: calc(100% - 2rem);
+            }
+            
+            .section-header { 
+                flex-direction: column; 
+                text-align: center; 
+                padding-right: 0;
+            }
+            
+            .section-icon { 
+                margin-right: 0; 
+                margin-bottom: 1.5rem; 
+            }
+            
+            .floating-element, .floating-icon { 
+                display: none; 
+            }
+            
+            .progress-container { 
+                flex-wrap: wrap; 
+                padding: 0 1rem; 
+            }
+            
+            .progress-step { 
+                margin-bottom: 1.5rem; 
+                flex: 1 0 50%;
+            }
+            
+            .nav-link { 
+                padding: 1rem 1.2rem; 
+            }
+            
+            .tab-container { 
+                flex-direction: column; 
+            }
+            
+            .tab { 
+                margin: 0.2rem 0; 
+                text-align: center;
+            }
+            
+            .chat-message { 
+                max-width: 90%; 
+            }
+            
+            .chat-input-container {
+                flex-wrap: wrap;
+            }
+            
+            .chat-voice-controls {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .content-box {
+                padding: 1.5rem;
+            }
+            
+            .status-badge {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+            
+            .voice-button {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-top: 1rem;
+            }
+            
+            .progress-bar {
+                top: 25px;
+            }
+            
+            .step-circle {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+            
+            .step-label {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Mobile Phones */
+        @media (max-width: 480px) {
+            h1 { 
+                font-size: 2rem; 
+            }
+            
+            h2 { 
+                font-size: 1.8rem; 
+            }
+            
+            .hero-section, .result-section { 
+                padding: 2rem 1rem; 
+                margin-left: 0.5rem;
+                margin-right: 0.5rem;
+                width: calc(100% - 1rem);
+            }
+            
+            .section-title { 
+                font-size: 2rem; 
+            }
+            
+            .content-box { 
+                padding: 1.5rem; 
+            }
+            
+            .chat-box { 
+                height: 300px; 
+                padding: 1rem; 
+            }
+            
+            .chat-input-container {
+                flex-direction: column;
+            }
+            
+            .chat-send {
+                width: 100%;
+            }
+            
+            .language-controls {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .language-indicator, .language-selector, .translate-btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .global-voice-controls {
+                align-self: center;
+            }
+            
+            .progress-container {
+                padding: 0;
+            }
+            
+            .progress-step {
+                flex: 1 0 100%;
+                margin-bottom: 2rem;
+            }
+            
+            .progress-bar {
+                display: none;
+            }
+            
+            .step-circle {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .nav-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .nav-text {
+                font-size: 0.9rem;
+            }
+            
+            .nav-link i {
+                margin-right: 0.8rem;
+                font-size: 1.1rem;
+            }
+            
+            .btn-primary {
+                padding: 1.2rem;
+                font-size: 1.1rem;
+            }
+            
+            .advocate-card {
+                padding: 1.5rem;
+            }
+            
+            .advocate-name {
+                font-size: 1.3rem;
+            }
+            
+            .advocate-detail {
+                font-size: 0.9rem;
+            }
+            
+            .chat-voice-controls {
+                flex-direction: column;
+            }
+            
+            .chat-voice-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            footer {
+                padding: 2rem 1rem;
+            }
+            
+            footer p {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Extra Small Phones */
+        @media (max-width: 360px) {
+            h1 { 
+                font-size: 1.8rem; 
+            }
+            
+            h2 { 
+                font-size: 1.6rem; 
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .hero-section, .result-section { 
+                padding: 1.5rem 0.8rem; 
+            }
+            
+            .content-box { 
+                padding: 1.2rem; 
+            }
+            
+            .nav-link {
+                padding: 0.8rem 1rem;
+            }
+            
+            .btn-primary {
+                padding: 1rem;
+                font-size: 1rem;
+            }
+            
+            .chat-box {
+                height: 250px;
+            }
+        }
+    </style>
 </head>
-<body class="text-gray-800">
-
-  <!-- Floating Background Elements -->
-  <div class="floating-elements">
-    <div class="floating-element"></div>
-    <div class="floating-element"></div>
-    <div class="floating-element"></div>
-    <div class="floating-element"></div>
-    <div class="floating-element"></div>
-    
-    <i class="floating-icon fas fa-balance-scale"></i>
-    
-  </div>
-
-  <!-- Header -->
-  <header class="bg-navy text-white py-5 shadow-md">
-    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center">
-      <div class="flex items-center mb-4 sm:mb-0">
-        <div class="bg-white p-2 rounded-full mr-3 shadow-md">
-          <i class="fas fa-scale-balanced text-navy text-xl"></i>
-        </div>
-        <h1 class="text-2xl font-bold">AI Courtroom Assistant</h1>
-      </div>
-      <a href="/" class="bg-white text-navy px-5 py-2.5 rounded-lg font-medium shadow hover:bg-gray-50 transition-all hover-lift flex items-center">
-        <i class="fas fa-plus-circle mr-2"></i> Analyze Another Document
-      </a>
+<body>
+    <!-- 3D Background Elements -->
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <i class="floating-icon fas fa-balance-scale"></i>
+        <i class="floating-icon fas fa-gavel"></i>
+        <i class="floating-icon fas fa-book"></i>
     </div>
-  </header>
 
-  <!-- Main -->
-  <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+    <!-- Mobile Navigation Toggle -->
+    <button class="mobile-nav-toggle" id="mobileNavToggle">
+        <i class="fas fa-bars"></i>
+    </button>
 
-    <!-- Summary -->
-    <section class="bg-white shadow rounded-xl p-6 fade-in hover-lift">
-      <div class="flex items-center mb-4">
-        <div class="bg-light-blue p-2.5 rounded-lg mr-3">
-          <i class="fas fa-magnifying-glass text-accent-blue text-xl"></i>
+    <!-- Language Controls -->
+    <div class="language-controls">
+        <span class="language-indicator">Language: English</span>
+        <select class="language-selector" id="languageSelector">
+            <option value="en">English</option>
+            <option value="hi">Hindi (हिन्दी)</option>
+            <option value="bn">Bengali (বাংলা)</option>
+            <option value="te">Telugu (తెలుగు)</option>
+            <option value="mr">Marathi (मराठी)</option>
+            <option value="ta">Tamil (தமிழ்)</option>
+            <option value="ur">Urdu (اردو)</option>
+            <option value="gu">Gujarati (ગુજરાતી)</option>
+            <option value="kn">Kannada (ಕನ್ನಡ)</option>
+            <option value="ml">Malayalam (മലയാളം)</option>
+            <option value="pa">Punjabi (ਪੰਜਾਬੀ)</option>
+        </select>
+        <button class="translate-btn" id="translateBtn">
+            <i class="fas fa-language"></i> Translate
+        </button>
+        <div class="global-voice-controls">
+            <button class="global-voice-btn" id="stopAllSpeech" title="Stop all speech">
+                <i class="fas fa-stop"></i>
+            </button>
         </div>
-        <h2 class="text-xl font-semibold section-header">Case Summary</h2>
-      </div>
-      <div class="bg-light-blue p-5 rounded-lg border border-blue-100">
-        <p class="text-gray-700 leading-relaxed">
-          Based on the analysis of the provided legal documents, this case involves a contractual dispute 
-          between two business entities regarding service delivery and payment terms. 
-          The plaintiff alleges breach of contract and seeks damages amounting to $250,000, 
-          while the defendant counters that the services were not rendered as specified in the agreement.
-        </p>
-      </div>
-    </section>
-
-    <!-- Draft Petition -->
-    <section class="bg-white shadow rounded-xl p-6 fade-in hover-lift">
-      <div class="flex items-center mb-4">
-        <div class="bg-light-blue p-2.5 rounded-lg mr-3">
-          <i class="fas fa-file-lines text-accent-blue text-xl"></i>
-        </div>
-        <h2 class="text-xl font-semibold section-header">Draft Petition</h2>
-      </div>
-      <div class="bg-light-blue p-5 rounded-lg border border-blue-100">
-        <pre class="whitespace-pre-wrap font-body text-gray-700 leading-relaxed">{{ draft }}</pre>
-      </div>
-    </section>
-
-    <!-- IPC Sections -->
-    <section class="bg-white shadow rounded-xl p-6 fade-in hover-lift">
-      <div class="flex items-center mb-4">
-        <div class="bg-light-blue p-2.5 rounded-lg mr-3">
-          <i class="fas fa-gavel text-accent-blue text-xl"></i>
-        </div>
-        <h2 class="text-xl font-semibold section-header">IPC Sections Detected</h2>
-      </div>
-      {% if ipc_list %}
-        <div class="grid md:grid-cols-2 gap-5">
-          {% for ipc in ipc_list %}
-            <div class="ipc-card border rounded-xl p-5 bg-white border-blue-100 shadow">
-              <p class="font-bold text-navy text-lg mb-2">Section {{ ipc.section }}</p>
-              <p class="text-gray-700">{{ ipc.description }}</p>
-            </div>
-          {% endfor %}
-        </div>
-      {% else %}
-        <div class="text-center py-8">
-          <i class="fas fa-search text-gray-300 text-4xl mb-3"></i>
-          <p class="text-gray-500 italic">No IPC Sections detected.</p>
-        </div>
-      {% endif %}
-    </section>
-
-    <!-- Free Legal Aid Resources -->
-    <section class="bg-white shadow rounded-xl p-6 fade-in hover-lift">
-      <div class="flex items-center mb-4">
-        <div class="bg-light-blue p-2.5 rounded-lg mr-3">
-          <i class="fas fa-hands-helping text-accent-blue text-xl"></i>
-        </div>
-        <h2 class="text-xl font-semibold section-header">Free Legal Aid Resources</h2>
-      </div>
-      <div class="grid md:grid-cols-2 gap-4">
-        {% for res in resources %}
-          <div class="bg-light-blue p-4 rounded-lg border border-blue-100 flex items-start">
-            <div class="bg-navy/10 p-2 rounded-full mr-3 flex-shrink-0">
-              <i class="fas fa-phone text-navy"></i>
-            </div>
-            <div>
-              <h3 class="font-medium text-navy">{{ res.Authority }}</h3>
-              <p class="text-gray-700 mt-1">{{ res.Helpline }}</p>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-    </section>
-
-    <!-- Download -->
-    <section class="bg-white shadow rounded-xl p-8 text-center fade-in">
-      <div class="bg-light-blue w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-        <i class="fas fa-file-download text-accent-blue text-2xl"></i>
-      </div>
-      <h2 class="text-xl font-semibold mb-4">Download Comprehensive Report</h2>
-      <p class="text-gray-600 max-w-xl mx-auto mb-5">
-        Get a detailed PDF version of this analysis with additional insights and references for your records.
-      </p>
-      <a href="/download/{{ report_file }}" 
-         class="download-btn inline-flex items-center bg-navy text-white px-8 py-3.5 rounded-lg shadow hover:bg-navy-light transition-all font-medium hover-lift">
-        <i class="fas fa-download mr-2"></i> Download PDF Report
-      </a>
-    </section>
-  </main>
-
-  <!-- Footer -->
-  <footer class="text-center text-sm text-gray-600 py-6 border-t border-gray-200 mt-8 bg-white">
-    <div class="max-w-3xl mx-auto px-4">
-      <div class="flex items-center justify-center mb-2">
-        <i class="fas fa-exclamation-circle text-accent-blue mr-2"></i>
-        <p class="font-medium">Important Disclaimer</p>
-      </div>
-      <p class="max-w-2xl mx-auto">
-        This tool provides preliminary analysis only and does not constitute legal advice. 
-        For official legal help, please consult qualified legal professionals or free legal aid services.
-      </p>
     </div>
-  </footer>
+
+    <!-- Side Navigation -->
+    <nav class="side-nav" id="sideNav">
+        <div class="nav-header">
+            <h2>AI Courtroom Assistant</h2>
+            <p>Case Analysis Dashboard</p>
+            <form action="/generate" method="post"></form>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a class="nav-link active" data-section="overview">
+                    <i class="fas fa-home"></i>
+                    <span class="nav-text">Case Overview</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-section="summary">
+                    <i class="fas fa-file-alt"></i>
+                    <span class="nav-text">Case Summary</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-section="ipc">
+                    <i class="fas fa-scale-balanced"></i>
+                    <span class="nav-text">IPC Sections</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-section="details">
+                    <i class="fas fa-folder-open"></i>
+                    <span class="nav-text">Case Details</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-section="advocates">
+                    <i class="fas fa-user-tie"></i>
+                    <span class="nav-text">Legal Advocates</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-section="chat">
+                    <i class="fas fa-robot"></i>
+                    <span class="nav-text">Legal Assistant</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-section="download">
+                    <i class="fas fa-download"></i>
+                    <span class="nav-text">Download Report</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header>
+            <h1>AI Courtroom Assistant</h1>
+        </header>
+
+        <main>
+            <div class="container">
+                <!-- Overview Section -->
+                <div class="result-section active" id="overview-section">
+                    <div class="hero-section">
+                        <h2>Case Analysis Results</h2>
+                        <p>Your legal document has been analyzed. Below are the insights and recommendations generated by our AI system.</p>
+                        
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 75%;"></div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="step-circle completed"><i class="fas fa-check"></i></div>
+                                <div class="step-label">Document Upload</div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="step-circle completed"><i class="fas fa-check"></i></div>
+                                <div class="step-label">Analysis</div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="step-circle active">3</div>
+                                <div class="step-label">Review Results</div>
+                            </div>
+                            <div class="progress-step">
+                                <div class="step-circle">4</div>
+                                <div class="step-label">Next Steps</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-box" id="overview-content">
+                        <div style="text-align: center; padding: 2rem;">
+                            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+                            <p>Loading case analysis...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Summary Section -->
+                <div class="result-section" id="summary-section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-file-alt"></i></div>
+                        <h2 class="section-title">Case Summary</h2>
+                        <span class="status-badge status-medium">Medium Complexity</span>
+                        <button class="voice-button" data-section="summary">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                    </div>
+                    <div class="content-box" id="summary-content">
+                        <div style="text-align: center; padding: 2rem;">
+                            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+                            <p>Loading case summary...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IPC Sections Section -->
+                <div class="result-section" id="ipc-section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-scale-balanced"></i></div>
+                        <h2 class="section-title">IPC Sections Detected</h2>
+                        <button class="voice-button" data-section="ipc">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                    </div>
+                    <div id="ipc-content">
+                        <div style="text-align: center; padding: 2rem;">
+                            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+                            <p>Loading IPC sections...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Details Section -->
+                <div class="result-section" id="details-section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-folder-open"></i></div>
+                        <h2 class="section-title">Case Details</h2>
+                        <button class="voice-button" data-section="details">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="tab-container">
+                        <div class="tab active" data-tab="draft">Draft Petition</div>
+                        <div class="tab" data-tab="weaknesses">Weak Points</div>
+                        <div class="tab" data-tab="actions">Recommended Actions</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="draft-tab">
+                        <div class="content-box" id="draft-content">
+                            <div style="text-align: center; padding: 2rem;">
+                                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+                                <p>Loading draft petition...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="weaknesses-tab">
+                        <div id="weaknesses-content">
+                            <div style="text-align: center; padding: 2rem;">
+                                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+                                <p>Loading weak points analysis...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="actions-tab">
+                        <div id="actions-content">
+                            <div style="text-align: center; padding: 2rem;">
+                                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+                                <p>Loading recommended actions...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advocates Section -->
+                <div class="result-section" id="advocates-section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-user-tie"></i></div>
+                        <h2 class="section-title">Recommended Advocates</h2>
+                        <button class="voice-button" data-section="advocates">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                    </div>
+                    <div id="advocates-content">
+                        <div style="text-align: center; padding: 2rem;">
+                            <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+                            <p>Loading advocate recommendations...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Section -->
+                <div class="result-section" id="chat-section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fas fa-robot"></i></div>
+                        <h2 class="section-title">Legal Chat Assistant</h2>
+                    </div>
+                    
+                    <div class="chat-container">
+                        <div class="chat-box" id="chat-box">
+                            <div class="chat-message bot-message">
+                                <strong>Hello! I'm your AI Legal Assistant.</strong><br><br>
+                                I can help you with:
+                                <ul>
+                                    <li>Explaining legal terms and procedures</li>
+                                    <li>Understanding your case details</li>
+                                    <li>Suggesting next steps</li>
+                                    <li>Answering legal questions</li>
+                                </ul>
+                                How can I assist you with your case today?
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <textarea class="chat-input" id="chat-input" placeholder="Type your legal question here..." rows="2"></textarea>
+                            <button class="chat-send" id="chat-send">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        <div class="chat-voice-controls">
+                            <button class="chat-voice-btn" id="chat-voice-btn">
+                                <i class="fas fa-microphone"></i> Voice Input
+                            </button>
+                            <button class="chat-voice-btn" id="chat-speak-btn">
+                                <i class="fas fa-volume-up"></i> Speak Response
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Download Section -->
+                <div class="result-section" id="download-section">
+                    <div class="hero-section">
+                        <h2>Download Complete Analysis Report</h2>
+                        <p>Get a comprehensive PDF report of your case analysis including all the details, IPC sections, and recommendations.</p>
+                        <button class="btn-primary" id="download-btn">
+                            <i class="fas fa-download"></i> Download Complete Analysis Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Disclaimer: This AI-generated analysis is for informational purposes only and does not constitute legal advice. Please consult with a qualified legal professional for advice specific to your situation.</p>
+            <p>© 2023 AI Courtroom Assistant. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Mobile Navigation Toggle
+        document.getElementById('mobileNavToggle').addEventListener('click', function() {
+            document.getElementById('sideNav').classList.toggle('active');
+        });
+
+        // Close mobile nav when clicking outside
+        document.addEventListener('click', function(event) {
+            const sideNav = document.getElementById('sideNav');
+            const mobileToggle = document.getElementById('mobileNavToggle');
+            
+            if (!sideNav.contains(event.target) && !mobileToggle.contains(event.target) && sideNav.classList.contains('active')) {
+                sideNav.classList.remove('active');
+            }
+        });
+
+        // Case Data Manager
+        class CaseDataManager {
+            constructor() {
+                this.caseData = null;
+                this.isLoading = false;
+            }
+
+            async loadCaseData() {
+                if (this.isLoading) return;
+                
+                this.isLoading = true;
+                this.showLoadingStates();
+
+                try {
+                    // Simulate API call with mock data for demonstration
+                    setTimeout(() => {
+                        this.caseData = this.getMockCaseData();
+                        this.updateUIWithData(this.caseData);
+                        this.isLoading = false;
+                    }, 1500);
+                    
+                } catch (error) {
+                    console.error('Error loading case data:', error);
+                    this.showErrorStates();
+                    this.isLoading = false;
+                }
+            }
+
+            getMockCaseData() {
+                return {
+                    fir_number: 'FIR/2023/12345',
+                    detected_location: 'New Delhi, India',
+                    summary: 'This case involves a property dispute between two parties over ownership rights of a residential property located in South Delhi. The plaintiff claims ancestral rights while the defendant has produced purchase documents. The case has been ongoing for 2 years with multiple hearings already conducted.',
+                    ipc_sections: [
+                        {section: 'IPC 420', description: 'Cheating and dishonestly inducing delivery of property'},
+                        {section: 'IPC 406', description: 'Punishment for criminal breach of trust'},
+                        {section: 'IPC 120B', description: 'Punishment of criminal conspiracy'}
+                    ],
+                    draft: 'IN THE COURT OF THE CIVIL JUDGE (SENIOR DIVISION)\nSOUTH DISTRICT, SAKET COURTS, NEW DELHI\n\nCivil Suit No: ________ of 2023\n\nShri Rajesh Kumar Sharma\nS/o Late Shri Ramesh Sharma\nR/o H. No. 123, Green Park Extension\nNew Delhi - 110016\n                                                      ... Plaintiff\n\nVERSUS\n\nMs. Priya Singh\nD/o Shri Vikram Singh\nR/o H. No. 456, Safdarjung Enclave\nNew Delhi - 110029\n                                                      ... Defendant\n\nSUIT FOR DECLARATION AND PERMANENT INJUNCTION\n\nRespectfully Showeth:\n1. That the plaintiff is the absolute owner of property bearing No. 123, Green Park Extension, New Delhi...',
+                    weak_spots: [
+                        {type: 'Documentation Gap', description: 'Missing original property deed from 1985'},
+                        {type: 'Witness Availability', description: 'Key witness has moved abroad and may not be available for testimony'}
+                    ],
+                    actions: [
+                        {step: 'Gather Additional Documents', description: 'Collect all property-related documents including tax receipts, utility bills, and correspondence'},
+                        {step: 'File Application for Interim Relief', description: 'Seek temporary injunction to prevent any alteration to the property during proceedings'},
+                        {step: 'Engage Property Valuation Expert', description: 'Hire a certified property valuer to assess current market value'}
+                    ],
+                    advocates: [
+                        {
+                            name: 'Adv. Ramesh Khanna',
+                            address: 'Chamber No. 45, Patiala House Courts, New Delhi',
+                            phone: '+91 98765 43210',
+                            email: 'r.khanna@legalexpert.com',
+                            speciality: ['Property Law', 'Civil Litigation'],
+                            rating: '4.8/5',
+                            experience: '15 years',
+                            price_range: '₹25,000 - ₹50,000 per hearing',
+                            enrollment_number: 'DL/1520/2008'
+                        },
+                        {
+                            name: 'Adv. Sunita Mehta',
+                            address: 'Supreme Court Chambers, Tilak Marg, New Delhi',
+                            phone: '+91 98765 43211',
+                            email: 's.mehta@scchambers.in',
+                            speciality: ['Property Disputes', 'Constitutional Law'],
+                            rating: '4.9/5',
+                            experience: '22 years',
+                            price_range: '₹50,000 - ₹1,00,000 per hearing',
+                            enrollment_number: 'DL/0895/2001'
+                        }
+                    ]
+                };
+            }
+
+            showLoadingStates() {
+                // Show loading states in all sections
+                document.querySelectorAll('.content-box, #ipc-content, #weaknesses-content, #actions-content, #advocates-content')
+                    .forEach(element => {
+                        element.innerHTML = `
+                            <div style="text-align: center; padding: 2rem;">
+                                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+                                <p>Loading data...</p>
+                            </div>
+                        `;
+                    });
+            }
+
+            showErrorStates() {
+                // Show error states
+                document.querySelectorAll('.content-box, #ipc-content, #weaknesses-content, #actions-content, #advocates-content')
+                    .forEach(element => {
+                        element.innerHTML = `
+                            <div style="text-align: center; padding: 2rem; color: var(--danger);">
+                                <i class="fas fa-exclamation-triangle" style="font-size: 2rem;"></i>
+                                <p>Failed to load data. Please refresh the page.</p>
+                            </div>
+                        `;
+                    });
+            }
+
+            updateUIWithData(data) {
+                console.log('Updating UI with data:', data);
+                
+                // Update Overview Section
+                this.updateOverview(data);
+                
+                // Update Summary Section
+                this.updateSummary(data);
+                
+                // Update IPC Sections
+                this.updateIPCSections(data.ipc_sections || []);
+                
+                // Update Case Details
+                this.updateCaseDetails(data);
+                
+                // Update Advocates
+                this.updateAdvocates(data.advocates || []);
+            }
+
+            updateOverview(data) {
+                const overviewContent = document.getElementById('overview-content');
+                if (!overviewContent) return;
+
+                let html = `
+                    <div class="case-overview">
+                        <h3 style="color: var(--primary); margin-bottom: 1rem;">Case Overview</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                            <div class="overview-card" style="background: linear-gradient(135deg, var(--light-gray) 0%, rgba(247,250,252,0.9) 100%); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--primary);">
+                                <h4 style="color: var(--primary); margin-bottom: 0.5rem;">FIR Number</h4>
+                                <p style="font-size: 1.2rem; font-weight: 600;">${data.fir_number || 'Not specified'}</p>
+                            </div>
+                            <div class="overview-card" style="background: linear-gradient(135deg, var(--light-gray) 0%, rgba(247,250,252,0.9) 100%); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--success);">
+                                <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Detected Location</h4>
+                                <p style="font-size: 1.2rem; font-weight: 600;">${data.detected_location || 'Unknown'}</p>
+                            </div>
+                            <div class="overview-card" style="background: linear-gradient(135deg, var(--light-gray) 0%, rgba(247,250,252,0.9) 100%); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--warning);">
+                                <h4 style="color: var(--primary); margin-bottom: 0.5rem;">IPC Sections</h4>
+                                <p style="font-size: 1.2rem; font-weight: 600;">${(data.ipc_sections || []).length} sections</p>
+                            </div>
+                        </div>
+                `;
+
+                if (data.summary) {
+                    html += `
+                        <div class="summary-preview" style="background: white; padding: 1.5rem; border-radius: 10px; border: 1px solid var(--mid-gray);">
+                            <h4 style="color: var(--primary); margin-bottom: 1rem;">Quick Summary</h4>
+                            <p style="line-height: 1.6;">${data.summary.substring(0, 300)}${data.summary.length > 300 ? '...' : ''}</p>
+                        </div>
+                    `;
+                }
+
+                overviewContent.innerHTML = html;
+            }
+
+            updateSummary(data) {
+                const summaryContent = document.getElementById('summary-content');
+                if (!summaryContent) return;
+
+                if (data.summary) {
+                    summaryContent.innerHTML = `
+                        <div style="line-height: 1.7; font-size: 1.1rem;">
+                            ${data.summary.replace(/\n/g, '<br>')}
+                        </div>
+                    `;
+                } else {
+                    summaryContent.innerHTML = '<p>No summary available.</p>';
+                }
+            }
+
+            updateIPCSections(ipcSections) {
+                const ipcContent = document.getElementById('ipc-content');
+                if (!ipcContent) return;
+
+                if (ipcSections.length > 0) {
+                    let html = '';
+                    ipcSections.forEach((section, index) => {
+                        if (typeof section === 'string') {
+                            html += `
+                                <div class="ipc-section">
+                                    <i class="fas fa-scale-balanced"></i>
+                                    <div>
+                                        <strong style="font-size: 1.2rem;">${section}</strong>
+                                        <p style="margin-top: 0.5rem; color: var(--text-light);">
+                                            Relevant Indian Penal Code section for this case.
+                                        </p>
+                                    </div>
+                                </div>
+                            `;
+                        } else if (typeof section === 'object') {
+                            html += `
+                                <div class="ipc-section">
+                                    <i class="fas fa-scale-balanced"></i>
+                                    <div>
+                                        <strong style="font-size: 1.2rem;">${section.section || section.title || 'IPC Section'}</strong>
+                                        ${section.description ? `<p style="margin-top: 0.5rem; color: var(--text-light);">${section.description}</p>` : ''}
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                    ipcContent.innerHTML = html;
+                } else {
+                    ipcContent.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; color: var(--dark-gray);">
+                            <i class="fas fa-info-circle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <p>No IPC sections detected in the analyzed document.</p>
+                        </div>
+                    `;
+                }
+            }
+
+            updateCaseDetails(data) {
+                // Update Draft Petition
+                const draftContent = document.getElementById('draft-content');
+                if (draftContent && data.draft) {
+                    draftContent.innerHTML = `
+                        <div style="line-height: 1.7; font-size: 1.1rem; white-space: pre-wrap;">
+                            ${data.draft}
+                        </div>
+                    `;
+                } else if (draftContent) {
+                    draftContent.innerHTML = '<p>No draft petition available.</p>';
+                }
+
+                // Update Weak Points
+                const weaknessesContent = document.getElementById('weaknesses-content');
+                if (weaknessesContent) {
+                    const weakSpots = data.weak_spots || [];
+                    if (weakSpots.length > 0) {
+                        let html = '';
+                        weakSpots.forEach(weakness => {
+                            html += `
+                                <div class="advocate-card">
+                                    <div class="advocate-name">
+                                        <i class="fas fa-exclamation-triangle" style="color: var(--warning);"></i>
+                                        ${weakness.type || weakness.category || 'Potential Issue'}
+                                    </div>
+                                    <div class="advocate-detail">
+                                        ${weakness.description || weakness.details || 'No description available.'}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        weaknessesContent.innerHTML = html;
+                    } else {
+                        weaknessesContent.innerHTML = `
+                            <div style="text-align: center; padding: 2rem; color: var(--success);">
+                                <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                                <p>No significant weak points detected. The case appears strong.</p>
+                            </div>
+                        `;
+                    }
+                }
+
+                // Update Recommended Actions
+                const actionsContent = document.getElementById('actions-content');
+                if (actionsContent) {
+                    const actions = data.actions || [];
+                    if (actions.length > 0) {
+                        let html = '';
+                        actions.forEach((action, index) => {
+                            html += `
+                                <div class="content-box" style="margin-bottom: 1.5rem;">
+                                    <h4 style="color: var(--primary); display: flex; align-items: center; gap: 0.5rem;">
+                                        <span class="step-number" style="background: var(--primary); color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem;">
+                                            ${index + 1}
+                                        </span>
+                                        ${action.step || action.title || `Step ${index + 1}`}
+                                    </h4>
+                                    <p style="margin-top: 0.5rem; line-height: 1.6;">
+                                        ${action.description || action.details || 'No description available.'}
+                                    </p>
+                                </div>
+                            `;
+                        });
+                        actionsContent.innerHTML = html;
+                    } else {
+                        actionsContent.innerHTML = '<p>No recommended actions available.</p>';
+                    }
+                }
+            }
+
+            updateAdvocates(advocates) {
+                const advocatesContent = document.getElementById('advocates-content');
+                if (!advocatesContent) return;
+
+                if (advocates.length > 0) {
+                    let html = '';
+                    advocates.forEach(advocate => {
+                        const specialities = Array.isArray(advocate.speciality) ? 
+                            advocate.speciality.join(', ') : (advocate.speciality || 'General Practice');
+                        
+                        html += `
+                            <div class="advocate-card">
+                                <div class="advocate-name">${advocate.name || 'Advocate Name Not Available'}</div>
+                                <div class="advocate-detail">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    ${advocate.address || 'Address not specified'}
+                                </div>
+                                <div class="advocate-detail">
+                                    <i class="fas fa-phone"></i>
+                                    ${advocate.phone || 'Phone not available'}
+                                </div>
+                                <div class="advocate-detail">
+                                    <i class="fas fa-envelope"></i>
+                                    ${advocate.email || 'Email not available'}
+                                </div>
+                                <div class="advocate-detail">
+                                    <i class="fas fa-briefcase"></i>
+                                    ${specialities}
+                                </div>
+                                <div class="advocate-detail">
+                                    <i class="fas fa-star"></i>
+                                    Rating: ${advocate.rating || 'N/A'} | Experience: ${advocate.experience || 'N/A'}
+                                </div>
+                                <div class="advocate-detail">
+                                    <i class="fas fa-indian-rupee-sign"></i>
+                                    ${advocate.price_range || 'Fees not specified'}
+                                </div>
+                                ${advocate.enrollment_number ? `
+                                    <div class="advocate-detail">
+                                        <i class="fas fa-id-card"></i>
+                                        Enrollment: ${advocate.enrollment_number}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    });
+                    advocatesContent.innerHTML = html;
+                } else {
+                    advocatesContent.innerHTML = `
+                        <div style="text-align: center; padding: 2rem; color: var(--dark-gray);">
+                            <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                            <p>No advocates found for your location. Please try adjusting your search criteria.</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Initialize Case Data Manager
+            const caseDataManager = new CaseDataManager();
+            
+            // Initialize UI components
+            initializeNavigation();
+            initializeTabs();
+            initializeChat();
+
+            // Load case data from backend
+            await caseDataManager.loadCaseData();
+        });
+
+        // Navigation functionality
+        function initializeNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const section = link.getAttribute('data-section');
+                    showSection(section);
+                    
+                    navLinks.forEach(nav => nav.classList.remove('active'));
+                    link.classList.add('active');
+                    
+                    // Close mobile nav after selection
+                    if (window.innerWidth <= 768) {
+                        document.getElementById('sideNav').classList.remove('active');
+                    }
+                });
+            });
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.result-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            const targetSection = document.getElementById(`${sectionId}-section`);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                // Scroll to top of section
+                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        // Tab functionality
+        function initializeTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+        }
+
+        // Chat functionality
+        function initializeChat() {
+            const chatSend = document.getElementById('chat-send');
+            const chatInput = document.getElementById('chat-input');
+            
+            if (chatSend && chatInput) {
+                chatSend.addEventListener('click', sendChatMessage);
+                
+                chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendChatMessage();
+                    }
+                });
+            }
+        }
+
+        function sendChatMessage() {
+            const chatInput = document.getElementById('chat-input');
+            const chatBox = document.getElementById('chat-box');
+            const message = chatInput.value.trim();
+            
+            if (!message) return;
+            
+            addChatMessage(message, 'user');
+            chatInput.value = '';
+            
+            // Simulate AI response
+            setTimeout(() => {
+                const responses = [
+                    "Based on your case details, I recommend focusing on gathering all property documents first.",
+                    "You should consult with a property law specialist to review your documentation.",
+                    "The weak points identified in your case can be addressed by collecting additional evidence.",
+                    "I suggest filing for an interim injunction to protect the property during proceedings."
+                ];
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                addChatMessage(randomResponse, 'bot');
+            }, 1000);
+        }
+
+        function addChatMessage(message, sender) {
+            const chatBox = document.getElementById('chat-box');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${sender}-message`;
+            
+            if (sender === 'bot') {
+                messageDiv.textContent = message;
+            } else {
+                messageDiv.textContent = message;
+            }
+            
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        // Download functionality
+        document.getElementById('download-btn')?.addEventListener('click', () => {
+            alert('Download functionality would generate a PDF report of the case analysis.');
+        });
+    </script>
 </body>
 </html>

@@ -1,4 +1,3 @@
-# facts.py
 import re
 from dateutil import parser
 
